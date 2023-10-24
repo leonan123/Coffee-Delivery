@@ -4,16 +4,15 @@ const config: Config = {
   content: ['./src/**/*.{tsx,ts}'],
   theme: {
     screens: {
-      sm: '480px',
-      md: '768px',
-      lg: '976px',
-      xl: '1280px',
+      sm: '768px',
+      md: '1024px',
+      lg: '1280px',
+      // xl: '1280px',
     },
     extend: {
       gridTemplateColumns: {
         list: 'repeat(auto-fit, minmax(256px, 1fr))',
       },
-
       fontSize: {
         xxs: '0.625rem',
       },

@@ -5,7 +5,6 @@ export interface Coffee {
   price: number
   image: string
   tags: string[]
-  quantity?: number
 }
 
 export const coffeeList: Coffee[] = [

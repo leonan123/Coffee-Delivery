@@ -2,12 +2,19 @@ import { ComponentProps } from 'react'
 import { VariantProps, tv } from 'tailwind-variants'
 
 const button = tv({
-  base: 'p-2 rounded cursor-pointer transition-[background-color] duration-150 ease-in-out',
+  base: 'p-2 rounded cursor-pointer transition-[background-color] duration-150 ease-in-out uppercase',
 
   variants: {
     variant: {
       ghost: ['bg-purple-700 text-white-200', 'hover:bg-purple-500'],
-      primary: ['bg-yellow-500', 'hover:bg-yellow-700'],
+      primary: [
+        'text-white-50 bg-yellow-500 py-3 font-bold text-sm',
+        'hover:bg-yellow-700',
+      ],
+      remove: [
+        'flex items-center justify-center gap-1 bg-white-400 max-h-[32px] text-xs text-brown-500',
+        'hover:bg-brown-100 hover:text-brown-700',
+      ],
     },
   },
 

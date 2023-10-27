@@ -28,7 +28,7 @@ export function CartProvider({ children }: CartProviderProps) {
       setItems((state) => {
         const newCoffees = state.map((item, index) => {
           if (index === indexOfCoffee) {
-            return { ...item, quantity: (item.quantity || 0) + quantity }
+            return { ...item, quantity }
           }
 
           return item

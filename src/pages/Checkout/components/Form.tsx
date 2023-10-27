@@ -6,48 +6,21 @@ import {
   Money,
 } from 'phosphor-react'
 import { Input } from './Input'
-import { useForm } from 'react-hook-form'
 import * as RadioGroup from '@radix-ui/react-radio-group'
-import * as z from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { CheckoutFormData } from '..'
+import { useFormContext } from 'react-hook-form'
 
-const checkoutFormSchemaValidation = z.object({
-  cep: z.string().regex(/^[0-9]{5}-?[0-9]{3}$/, 'CEP inválido'),
-  street: z.string().min(1, 'Informe a rua'),
-  number: z.string().min(1, 'Informe o número'),
-  complement: z.string(),
-  neighborhood: z.string().min(1, 'Informe o bairro'),
-  city: z.string().min(1, 'Informe sua cidade'),
-  uf: z.string().min(2, 'Informe seu estado').max(2),
-  paymentMethod: z.enum(['credit', 'debit', 'money']),
-})
-
-type CheckoutFormData = z.infer<typeof checkoutFormSchemaValidation>
-
-export function Form() {
+export function FormCheckout() {
   const {
-    register,
-    handleSubmit,
-    // formState: { errors },
     watch,
-  } = useForm<CheckoutFormData>({
-    resolver: zodResolver(checkoutFormSchemaValidation),
-    defaultValues: {
-      paymentMethod: 'credit',
-    },
-  })
+    register,
+    formState: { errors },
+  } = useFormContext<CheckoutFormData>()
 
-  function handleFormSubmit(data: CheckoutFormData) {
-    console.log(data)
-  }
-
+  console.log(errors)
   const cep = watch('cep') || ''
   return (
-    <form
-      className="flex flex-col gap-3"
-      onSubmit={handleSubmit(handleFormSubmit)}
-      id="checkout-form"
-    >
+    <div className="flex flex-col gap-3">
       <div className="mt-4 rounded bg-white-200 p-10">
         <header className="flex gap-2">
           <MapPinLine size={22} className="text-yellow-700" />
@@ -166,6 +139,6 @@ export function Form() {
           </RadioGroup.Root>
         </main>
       </div>
-    </form>
+    </div>
   )
 }

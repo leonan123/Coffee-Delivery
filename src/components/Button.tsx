@@ -10,6 +10,7 @@ const button = tv({
       primary: [
         'text-white-50 bg-yellow-500 py-3 font-bold text-sm',
         'hover:bg-yellow-700',
+        'disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:bg-yellow-500',
       ],
       remove: [
         'flex items-center justify-center gap-1 bg-white-400 max-h-[32px] text-xs text-brown-500',

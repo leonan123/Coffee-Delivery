@@ -4,7 +4,7 @@ import { CartProvider } from './contexts/Cart'
 
 export function App() {
   return (
-    <div className="min-h-screen bg-white-100">
+    <div className="min-h-screen bg-white-100 pb-5">
       <CartProvider>
         <BrowserRouter>
           <Router />

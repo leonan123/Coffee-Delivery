@@ -12,7 +12,7 @@ export function Header() {
   return (
     <header className="flex items-center justify-between px-6 py-8 md:container md:mx-auto">
       <Link to="/">
-        <img src="./Logo.svg" alt="Coffee Delivery" />
+        <img src="./Logo.svg" srcSet="../Logo.svg" alt="Coffee Delivery" />
       </Link>
       <div className="flex items-center justify-center gap-3">
         <div className="flex items-center justify-center gap-1 rounded-md bg-purple-100 p-2 font-normal">

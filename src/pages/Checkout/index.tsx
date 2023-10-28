@@ -72,9 +72,6 @@ export function Checkout() {
       totalAmount,
     }
 
-    // Would send to an API to process the request
-    console.log(orderData)
-
     const ordersDataSession = sessionStorage.getItem(SESSION_KEY)
 
     if (ordersDataSession) {

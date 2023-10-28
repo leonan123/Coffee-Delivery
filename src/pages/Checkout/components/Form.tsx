@@ -8,16 +8,16 @@ import {
 import { Input } from './Input'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { CheckoutFormData } from '..'
-import { useFormContext } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 
 export function FormCheckout() {
   const {
+    control,
     watch,
     register,
-    formState: { errors },
+    // formState: { errors },
   } = useFormContext<CheckoutFormData>()
 
-  console.log(errors)
   const cep = watch('cep') || ''
   return (
     <div className="flex flex-col gap-3">
@@ -103,40 +103,46 @@ export function FormCheckout() {
           </div>
         </header>
         <main className="mt-8">
-          <RadioGroup.Root
-            className="gap flex flex-wrap items-center justify-center gap-3 md:justify-start"
-            defaultValue="credit"
-            aria-label="payment method"
-            id="paymentMethod"
-            {...register('paymentMethod')}
-          >
-            <RadioGroup.Item
-              value="credit"
-              id="r1"
-              className="flex items-center gap-3 rounded-md border-[1.5px] border-transparent bg-white-400 p-4  text-xs uppercase text-brown-500 transition-colors duration-75 data-[state=checked]:border-purple-500 data-[state=checked]:bg-purple-100"
-            >
-              <CreditCard size={16} className="text-purple-500" />
-              Cartão de crédito
-            </RadioGroup.Item>
+          <Controller
+            control={control}
+            name="paymentMethod"
+            render={({ field }) => (
+              <RadioGroup.Root
+                className="gap flex flex-wrap items-center justify-center gap-3 md:justify-start"
+                aria-label="payment method"
+                id="paymentMethod"
+                onValueChange={field.onChange}
+                value={field.value}
+              >
+                <RadioGroup.Item
+                  value="credit"
+                  id="r1"
+                  className="flex items-center gap-3 rounded-md border-[1.5px] border-transparent bg-white-400 p-4 text-xs uppercase text-brown-500 transition-colors duration-75 data-[state=checked]:border-purple-500 data-[state=checked]:bg-purple-100"
+                >
+                  <CreditCard size={16} className="text-purple-500" />
+                  Cartão de crédito
+                </RadioGroup.Item>
 
-            <RadioGroup.Item
-              value="debit"
-              id="r2"
-              className="flex items-center gap-3 rounded-md border-[1.5px] border-transparent bg-white-400 p-4 text-xs uppercase text-brown-500 transition-colors duration-75 data-[state=checked]:border-purple-500 data-[state=checked]:bg-purple-100"
-            >
-              <Bank size={16} className="text-purple-500" />
-              Cartão de débito
-            </RadioGroup.Item>
+                <RadioGroup.Item
+                  value="debit"
+                  id="r2"
+                  className="flex items-center gap-3 rounded-md border-[1.5px] border-transparent bg-white-400 p-4 text-xs uppercase text-brown-500 transition-colors duration-75 data-[state=checked]:border-purple-500 data-[state=checked]:bg-purple-100"
+                >
+                  <Bank size={16} className="text-purple-500" />
+                  Cartão de débito
+                </RadioGroup.Item>
 
-            <RadioGroup.Item
-              value="money"
-              id="r3"
-              className="flex items-center gap-3 rounded-md border-[1.5px] border-transparent bg-white-400 p-4 text-xs uppercase text-brown-500 transition-colors duration-75 data-[state=checked]:border-purple-500 data-[state=checked]:bg-purple-100"
-            >
-              <Money size={16} className="text-purple-500" />
-              Dinheiro
-            </RadioGroup.Item>
-          </RadioGroup.Root>
+                <RadioGroup.Item
+                  value="money"
+                  id="r3"
+                  className="flex items-center gap-3 rounded-md border-[1.5px] border-transparent bg-white-400 p-4 text-xs uppercase text-brown-500 transition-colors duration-75 data-[state=checked]:border-purple-500 data-[state=checked]:bg-purple-100"
+                >
+                  <Money size={16} className="text-purple-500" />
+                  Dinheiro
+                </RadioGroup.Item>
+              </RadioGroup.Root>
+            )}
+          />
         </main>
       </div>
     </div>

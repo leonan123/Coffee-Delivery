@@ -19,7 +19,7 @@ export function Success() {
 
   const paymentMethods = {
     credit: 'Cartão de crédito',
-    debit: 'Cartão de crédito',
+    debit: 'Cartão de débito',
     money: 'Dinheiro',
   }
 

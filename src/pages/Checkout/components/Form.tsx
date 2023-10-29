@@ -15,7 +15,7 @@ export function FormCheckout() {
     control,
     watch,
     register,
-    // formState: { errors },
+    formState: { errors },
   } = useFormContext<CheckoutFormData>()
 
   const cep = watch('cep') || ''
@@ -32,14 +32,14 @@ export function FormCheckout() {
           </div>
         </header>
         <main className="mt-8 space-y-4">
-          <div className="flex flex-row flex-wrap gap-4 md:flex-col">
+          <div className="flex flex-col flex-wrap gap-4">
             <Input
               placeholder="CEP"
-              className="col-span-1 flex-1"
+              className="sm:max-w-[200px]"
               maxLength={9}
               value={cep.replace(/(\d{5})(\d)/, '$1-$2')}
               {...register('cep')}
-              // error={errors.cep ? errors.cep.message : undefined}
+              error={errors.cep?.message ?? undefined}
             />
 
             <Input
@@ -47,47 +47,48 @@ export function FormCheckout() {
               placeholder="Rua"
               {...register('street')}
               className="flex-1"
+              error={errors.street?.message ?? undefined}
             />
           </div>
 
-          <div className="flex flex-wrap gap-4 md:grid md:grid-cols-3">
+          <div className="flex flex-col flex-wrap gap-4 sm:flex-row">
             <Input
               id="number"
               placeholder="Número"
               {...register('number')}
-              className="flex-1"
-              // error={errors.number ? errors.number.message : undefined}
+              className="sm:max-w-[200px]"
+              error={errors.number?.message ?? undefined}
             />
             <Input
               id="complement"
               placeholder="Complemento"
-              className="flex-1 md:col-span-2"
+              className="flex-1"
               {...register('complement')}
-              // error={errors.complement ? errors.complement.message : undefined}
+              required={false}
             />
           </div>
 
-          <div className="flex flex-wrap gap-4 md:grid md:grid-cols-[175px_1fr_60px]">
+          <div className="flex flex-col flex-wrap gap-4 sm:flex-row">
             <Input
               id="neighborhood"
               placeholder="Bairro"
               {...register('neighborhood')}
-              className="flex-1"
-              // error={errors.neighborhood ? errors.neighborhood.message : undefined}
+              className="sm:max-w-[200px]"
+              error={errors.neighborhood?.message ?? undefined}
             />
             <Input
               id="city"
               placeholder="Cidade"
               {...register('city')}
-              className="flex-1"
-              // error={errors.city ? errors.city.message : undefined}
+              className="sm:flex-1"
+              error={errors.city?.message ?? undefined}
             />
             <Input
               id="uf"
               placeholder="UF"
               {...register('uf')}
-              className="flex-1"
-              // error={errors.uf ? errors.uf.message : undefined}
+              className="sm:max-w-[60px]"
+              error={errors.uf?.message ?? undefined}
             />
           </div>
         </main>

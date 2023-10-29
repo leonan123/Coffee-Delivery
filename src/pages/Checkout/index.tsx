@@ -88,7 +88,7 @@ export function Checkout() {
 
   return (
     <main className="mt-10 overflow-x-hidden">
-      <section className="flex flex-col gap-8 overflow-auto px-6 lg:container md:flex-row lg:mx-auto">
+      <section className="flex flex-col gap-8 overflow-auto px-6 md:container md:mx-auto md:flex-row">
         <div className="max-w-[850px] flex-1">
           <h2 className="font-secondary text-xl leading-6">
             Complete seu pedido
@@ -101,7 +101,7 @@ export function Checkout() {
             </form>
           </div>
         </div>
-        <div className="w-full lg:max-w-[448px]">
+        <div className="w-full md:max-w-[448px]">
           <h2 className="font-secondary text-xl leading-6">
             Cafés selecionados
           </h2>

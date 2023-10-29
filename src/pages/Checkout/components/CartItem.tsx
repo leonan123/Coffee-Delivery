@@ -9,10 +9,10 @@ interface CartItemProps {
 }
 
 export function CartItem({ coffee }: CartItemProps) {
-  const { removeToCart } = useCart()
+  const { removeFromCart } = useCart()
 
-  function removeFromCart() {
-    removeToCart(coffee.id)
+  function handleRemoveFromCart() {
+    removeFromCart(coffee.id)
   }
 
   return (
@@ -23,7 +23,11 @@ export function CartItem({ coffee }: CartItemProps) {
           <span className="text-brown-700">{coffee.name}</span>
           <div className="flex flex-wrap items-center gap-2">
             <Counter coffeeId={coffee.id} counter={-1} />
-            <Button variant="remove" className="group" onClick={removeFromCart}>
+            <Button
+              variant="remove"
+              className="group"
+              onClick={handleRemoveFromCart}
+            >
               <Trash
                 size={16}
                 className="text-purple-500 transition-colors group-hover:text-purple-700"

@@ -15,7 +15,7 @@ export function Counter({
   onAddQuantity,
   onRemoveQuantity,
 }: CounterProps) {
-  const { items, removeToCart, addQuantity, removeQuantity } = useCart()
+  const { items, removeFromCart, addQuantity, removeQuantity } = useCart()
 
   const indexOfCoffee = items.findIndex((item) => item.id === coffeeId)
 
@@ -37,9 +37,9 @@ export function Counter({
 
   useEffect(() => {
     if (counter === 0 && indexOfCoffee >= 0 && !items[indexOfCoffee].quantity) {
-      removeToCart(coffeeId)
+      removeFromCart(coffeeId)
     }
-  }, [counter, indexOfCoffee, removeToCart, coffeeId, items])
+  }, [counter, indexOfCoffee, removeFromCart, coffeeId, items])
 
   const coffeeQuantity =
     items.find((item) => item.id === coffeeId)?.quantity ?? counter

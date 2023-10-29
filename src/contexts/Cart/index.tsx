@@ -1,5 +1,12 @@
-import { ReactNode, createContext, useState } from 'react'
+import { ReactNode, createContext, useEffect, useReducer } from 'react'
 import { Coffee } from '../../db/coffeeList'
+import { cartReducer } from '../../reducers/cart/reducer'
+import {
+  addItemToCartAction,
+  addQuantityAction,
+  removeItemFromCartAction,
+  removeQuantityAction,
+} from '../../reducers/cart/actions'
 
 export interface CartProps extends Coffee {
   quantity?: number
@@ -8,7 +15,7 @@ export interface CartProps extends Coffee {
 interface CartContextType {
   items: CartProps[]
   addToCart: (coffee: Coffee, quantity: number) => void
-  removeToCart: (id: number) => void
+  removeFromCart: (id: number) => void
   removeQuantity: (coffeeIdToRemove: number) => void
   addQuantity: (coffeeIdToAddQuantity: number) => void
 }
@@ -19,76 +26,41 @@ interface CartProviderProps {
   children: ReactNode
 }
 export function CartProvider({ children }: CartProviderProps) {
-  const [items, setItems] = useState<CartProps[]>([])
+  const [items, dispatch] = useReducer(cartReducer, [], (initialState) => {
+    const storedStateAsJSON = sessionStorage.getItem(
+      '@coffee-delivery:cart-1.0.0',
+    )
+
+    if (storedStateAsJSON) {
+      return JSON.parse(storedStateAsJSON)
+    }
+
+    return initialState
+  })
 
   function addToCart(coffeeToAdd: CartProps, quantity: number = 1) {
-    const indexOfCoffee = items.findIndex((item) => item.id === coffeeToAdd.id)
-
-    if (indexOfCoffee >= 0) {
-      setItems((state) => {
-        const newCoffees = state.map((item, index) => {
-          if (index === indexOfCoffee) {
-            return { ...item, quantity }
-          }
-
-          return item
-        })
-
-        return newCoffees
-      })
-    } else {
-      coffeeToAdd.quantity = quantity
-      setItems((state) => [...state, coffeeToAdd])
-    }
+    dispatch(addItemToCartAction(coffeeToAdd, quantity))
   }
 
-  function removeToCart(id: number) {
-    setItems((state) => state.filter((item) => item.id !== id))
+  function removeFromCart(id: number) {
+    dispatch(removeItemFromCartAction(id))
   }
 
   function addQuantity(coffeeIdToAddQuantity: number) {
-    const indexOfCoffee = items.findIndex(
-      (item) => item.id === coffeeIdToAddQuantity,
-    )
-
-    if (indexOfCoffee < 0) return
-
-    setItems((state) => {
-      const newCoffees = state.map((item, index) => {
-        if (index === indexOfCoffee) {
-          return { ...item, quantity: (item.quantity || 0) + 1 }
-        }
-
-        return item
-      })
-      return newCoffees
-    })
+    dispatch(addQuantityAction(coffeeIdToAddQuantity))
   }
 
   function removeQuantity(coffeeIdToRemove: number) {
-    const indexOfCoffee = items.findIndex(
-      (item) => item.id === coffeeIdToRemove,
-    )
-
-    if (indexOfCoffee >= 0) {
-      setItems((state) => {
-        const newCoffees = state.map((item, index) => {
-          if (index === indexOfCoffee && item.quantity !== 0) {
-            return { ...item, quantity: (item.quantity || 0) - 1 }
-          }
-
-          return item
-        })
-
-        return newCoffees
-      })
-    }
+    dispatch(removeQuantityAction(coffeeIdToRemove))
   }
 
-  console.log(items)
+  useEffect(() => {
+    sessionStorage.setItem('@coffee-delivery:cart-1.0.0', JSON.stringify(items))
+  }, [items])
+
   return (
     <CartContext.Provider
-      value={{ items, addToCart, removeToCart, removeQuantity, addQuantity }}
+      value={{ items, addToCart, removeFromCart, removeQuantity, addQuantity }}
     >
       {children}
     </CartContext.Provider>

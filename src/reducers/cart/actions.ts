@@ -5,6 +5,7 @@ export enum ActionTypes {
   REMOVE_ITEM = 'REMOVE_ITEM',
   ADD_QUANTITY = 'ADD_QUANTITY',
   REMOVE_QUANTITY = 'REMOVE_QUANTITY',
+  CLEAR_CART = 'CLEAR_CART',
 }
 
 export function addItemToCartAction(coffeeToAdd: Coffee, quantity: number = 1) {
@@ -41,5 +42,11 @@ export function removeQuantityAction(coffeeIdToRemove: number) {
     payload: {
       coffeeIdToRemove,
     },
+  }
+}
+
+export function clearCartAction() {
+  return {
+    type: ActionTypes.CLEAR_CART,
   }
 }

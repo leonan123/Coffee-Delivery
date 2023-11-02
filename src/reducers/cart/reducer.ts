@@ -62,6 +62,10 @@ export function cartReducer(state: CartProps[], action: any): CartProps[] {
         draft[itemIndex].quantity = (draft[itemIndex].quantity || 0) - 1
       })
     }
+
+    case ActionTypes.CLEAR_CART: {
+      return []
+    }
   }
 
   return state

@@ -4,6 +4,7 @@ import { cartReducer } from '../../reducers/cart/reducer'
 import {
   addItemToCartAction,
   addQuantityAction,
+  clearCartAction,
   removeItemFromCartAction,
   removeQuantityAction,
 } from '../../reducers/cart/actions'
@@ -18,6 +19,7 @@ interface CartContextType {
   removeFromCart: (id: number) => void
   removeQuantity: (coffeeIdToRemove: number) => void
   addQuantity: (coffeeIdToAddQuantity: number) => void
+  clearCart: () => void
 }
 
 export const CartContext = createContext({} as CartContextType)
@@ -54,13 +56,24 @@ export function CartProvider({ children }: CartProviderProps) {
     dispatch(removeQuantityAction(coffeeIdToRemove))
   }
 
+  function clearCart() {
+    dispatch(clearCartAction())
+  }
+
   useEffect(() => {
     sessionStorage.setItem('@coffee-delivery:cart-1.0.0', JSON.stringify(items))
   }, [items])
 
   return (
     <CartContext.Provider
-      value={{ items, addToCart, removeFromCart, removeQuantity, addQuantity }}
+      value={{
+        items,
+        addToCart,
+        removeFromCart,
+        removeQuantity,
+        addQuantity,
+        clearCart,
+      }}
     >
       {children}
     </CartContext.Provider>

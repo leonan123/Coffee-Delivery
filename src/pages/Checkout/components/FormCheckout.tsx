@@ -9,16 +9,46 @@ import { Input } from './Input'
 import * as RadioGroup from '@radix-ui/react-radio-group'
 import { CheckoutFormData } from '..'
 import { Controller, useFormContext } from 'react-hook-form'
+import axios from 'axios'
 
+interface AvailableInputs {
+  [key: string]: string
+}
 export function FormCheckout() {
   const {
     control,
     watch,
     register,
+    setValue,
     formState: { errors },
   } = useFormContext<CheckoutFormData>()
 
   const cep = watch('cep') || ''
+
+  async function handleBlurCep() {
+    if (cep.length === 9) {
+      const response = await axios.get(
+        `https://viacep.com.br/ws/${cep.replace('-', '')}/json/`,
+      )
+      const data = response.data
+
+      if (!data.erro) {
+        const availableInputs: AvailableInputs = {
+          street: 'logradouro',
+          neighborhood: 'bairro',
+          city: 'localidade',
+          uf: 'uf',
+        }
+
+        Object.keys(availableInputs).forEach((key) => {
+          if (data[availableInputs[key]].length) {
+            setValue(key as keyof CheckoutFormData, data[availableInputs[key]])
+          }
+        })
+      }
+    }
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div className="mt-4 rounded bg-white-200 p-10">
@@ -40,6 +70,7 @@ export function FormCheckout() {
               value={cep.replace(/(\d{5})(\d)/, '$1-$2')}
               {...register('cep')}
               error={errors.cep?.message ?? undefined}
+              onBlur={handleBlurCep}
             />
 
             <Input

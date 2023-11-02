@@ -1,5 +1,5 @@
 import { Button } from '../../components/Button'
-import { FormCheckout } from './components/Form'
+import { FormCheckout } from './components/FormCheckout'
 import { useCart } from '../../contexts/Cart/useCart'
 import { CartItem } from './components/CartItem'
 import { SmileyBlank } from 'phosphor-react'
@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { CartProps } from '../../contexts/Cart'
 import { useNavigate } from 'react-router-dom'
 import { v4 as uuidV4 } from 'uuid'
+import { useLocation } from '../../contexts/Location/useLocation'
 
 const checkoutFormSchemaValidation = z.object({
   cep: z.string().regex(/^[0-9]{5}-?[0-9]{3}$/, 'CEP inválido'),
@@ -39,11 +40,22 @@ export const SESSION_KEY = '@coffee-delivery:orders-1.0.0'
 
 export function Checkout() {
   const navigate = useNavigate()
-  const { items } = useCart()
+
+  const { items, clearCart } = useCart()
+  const { location } = useLocation()
+
+  console.log(location)
 
   const checkoutForm = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutFormSchemaValidation),
     defaultValues: {
+      city: location.city ?? '',
+      uf: location.stateCode ?? '',
+      neighborhood: location.neighborhood ?? '',
+      street: location.street ?? '',
+      number: location.number ?? '',
+      complement: location.complement ?? '',
+      cep: location.cep ?? '',
       paymentMethod: 'credit',
     },
   })
@@ -60,8 +72,8 @@ export function Checkout() {
   const totalAmount = +(totalValueOfItems + deliveryPrice).toFixed(2)
   const haveItems = items.length > 0
 
-  function handleFormSubmit(data: CheckoutFormData) {
-    const orderData: OrderData = {
+  function assembleOrder(data: CheckoutFormData) {
+    const order: OrderData = {
       id: uuidV4(),
       deliveryDetails: data,
       totalPriceItens: totalValueOfItems,
@@ -76,14 +88,37 @@ export function Checkout() {
 
     if (ordersDataSession) {
       const ordersData = JSON.parse(ordersDataSession)
-      ordersData.push(orderData)
+      ordersData.push(order)
 
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(ordersData))
     } else {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify([orderData]))
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify([order]))
     }
 
-    navigate(`/success/${orderData.id}`)
+    return order
+  }
+
+  function saveLocationData(data: CheckoutFormData) {
+    const dataToSave = {
+      city: data.city,
+      cep: data.cep,
+      street: data.street,
+      number: data.number,
+      complement: data.complement,
+      neighborhood: data.neighborhood,
+      stateCode: data.uf,
+    }
+
+    localStorage.setItem(
+      '@coffee-delivery:location-1.0.0',
+      JSON.stringify(dataToSave),
+    )
+  }
+  function handleFormSubmit(data: CheckoutFormData) {
+    const order = assembleOrder(data)
+    navigate(`/success/${order.id}`)
+    clearCart()
+    saveLocationData(data)
   }
 
   return (

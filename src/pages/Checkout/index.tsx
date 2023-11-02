@@ -44,8 +44,6 @@ export function Checkout() {
   const { items, clearCart } = useCart()
   const { location } = useLocation()
 
-  console.log(location)
-
   const checkoutForm = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutFormSchemaValidation),
     defaultValues: {

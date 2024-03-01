@@ -4,7 +4,7 @@ export function Intro() {
   return (
     <section className="relative">
       <div className="absolute h-full w-screen bg-intro bg-center bg-repeat blur-3xl" />
-      <div className="flex flex-wrap items-center justify-center gap-14 px-6 py-[5.875rem] md:container md:mx-auto xl:justify-between">
+      <div className="relative z-10 flex flex-wrap items-center justify-center gap-14 px-6 py-[5.875rem] md:container md:mx-auto">
         <div className="max-w-[588px] space-y-4 justify-self-start">
           <h1 className="text-brown- font-secondary text-5xl leading-13 ">
             Encontre o café perfeito para qualquer hora do dia
